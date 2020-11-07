@@ -4,18 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="shared.css">
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
    
 </script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <body>
-    <form  method="POST" id="Login">
-        <label for="username"></label><input   type="text" name="username" id="username" placeholder="Enter your username">
-        <label for="password"></label><input type="password" name="password" id="password" placeholder="Enter your password">
-        <button class="btn" type="submit">  Login
-        </button>
-    </form>
+  <div class="body"></div>
+        <div class="grad"></div>
+        <div class="header">
+            <div>Paper<span>Go</span></div>
+        </div>
+        <br>
+        <div class="login">
+                <form  method="POST" id="Login">
+                  <label for="username"></label><input   type="text" name="username" id="username" placeholder="Username">
+                  <label for="password"></label><input type="password" name="password" id="password" placeholder="Password">
+                  <input type="button" value="Login">
+                </form>
+        </div>
     <div id="Error"></div>
 </body>
 <script>
