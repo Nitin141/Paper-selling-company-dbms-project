@@ -13,52 +13,53 @@ $.fn.serializeObject = function () {
   });
   return o;
 };
-const signup = document.getElementById("Signup");
-const button = document.getElementById("btn");
-signup.addEventListener("submit", (e) => {
+const workswith = document.getElementById("Workswith");
+workswith.addEventListener("submit", (e) => {
+  console.log("Hello");
   e.preventDefault();
-  var formData = JSON.stringify($("#Signup").serializeObject());
-  console.log(formData);
-
-  var w = document.forms["Signup"]["username"].value;
-  var x = document.forms["Signup"]["password"].value;
-  var y = document.forms["Signup"]["cpassword"].value;
-  if (x == "" || w == "" || y == "") {
+  let salesData = JSON.stringify($("#Workswith").serializeObject());
+  let empid = document.forms["Workswith"]["empid"].value;
+  let clientid = document.forms["Workswith"]["clientid"].value;
+  let totalsales = document.forms["Workswith"]["totalsales"].value;
+  if (empid == "" || clientid == "" || totalsales == "") {
     let message = document.getElementById("message");
     message.innerHTML = `<div class="alert alert-danger" role="alert">
-    No field must be left empty
-</div>`;
+                                No field must be left empty
+                        </div>`;
     setTimeout(() => {
       message.innerHTML = "";
     }, 2000);
   } else {
     $.ajax({
       type: "POST",
-      url: "http://localhost:4000/signup",
-      data: formData,
+      url: "http://localhost:4000/insertworkswith",
+      data: salesData,
       success: function () {
         let message = document.getElementById("message");
         message.innerHTML = `<div class="alert alert-success" role="alert">
-        New admin inserted
+      Sales data inserted
     </div>`;
         setTimeout(() => {
           message.innerHTML = "";
         }, 2000);
+        document.getElementById("empid").value = "";
+        document.getElementById("clientid").value = "";
+        document.getElementById("totalsales").value = "";
       },
-      error: function (status) {
+      error: function () {
         if (status.status == 500) {
           let message = document.getElementById("message");
           message.innerHTML = `<div class="alert alert-danger" role="alert">
-          Password must be same in both field;
-      </div>`;
+      Employee id or client id doesnot exists
+</div>`;
           setTimeout(() => {
             message.innerHTML = "";
           }, 2000);
-        } else if (status.status == 400) {
+        } else {
           let message = document.getElementById("message");
           message.innerHTML = `<div class="alert alert-danger" role="alert">
-        Username or password already exists;
-    </div>`;
+      Employee  and client belong to different branches
+</div>`;
           setTimeout(() => {
             message.innerHTML = "";
           }, 2000);
