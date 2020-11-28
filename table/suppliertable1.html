@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee details</title>
+    <title>Supplier details</title>
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -46,22 +46,9 @@
           </ul>
         </div>
       </nav>
-      <form class="my-4 mx-4" id="Employeetable" name="Employeetable" method="POST">
-        <div class="form-group">
-          <input type="number" class="form-control" id="empid" name="empid"  aria-describedby="emailHelp" placeholder="Enter employee's id">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" id="firstname" name="firstname"  aria-describedby="emailHelp" placeholder="Enter employee's FirstName">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter employee's LastName">
-        </div>
-        <button type="submit" class="btn btn-primary">Display</button>
-        
-    </form>
     <div id="message">
     </div>
-    <table class="table table-dark" id="table">
+    <table class="table table-dark my-4" id="table">
         <thead id="tablehead">
         </thead>
         <tbody id="tablebody">
@@ -69,7 +56,7 @@
       </table>
 </body>
 <script>
-    $.fn.serializeObject = function () {
+      $.fn.serializeObject = function () {
   var o = {};
   var a = this.serializeArray();
   $.each(a, function () {
@@ -84,33 +71,13 @@
   });
   return o;
 };
-const empdata=document.getElementById("Employeetable");
-empdata.addEventListener("submit", (e) => {
-    e.preventDefault();
-    tablehead.innerHTML='';
-    tablebody.innerHTML='';
-    let employeeData = JSON.stringify($("#Employeetable").serializeObject());
-    console.log(employeeData);
-    var w = document.forms["Employeetable"]["empid"].value;
-  var x = document.forms["Employeetable"]["firstname"].value;
-  var y = document.forms["Employeetable"]["lastname"].value;
-  if(w==''||x==''||y=='')
-  {
-    let message = document.getElementById("message");
-    console.log(message);
-    message.innerHTML = `<div class="alert alert-danger" role="alert">
-        No field must be left empty
-    </div>`;
-    setTimeout(() => {
-      message.innerHTML = "";
-    }, 2000);
-  }
-  else{
-      let myArray=[];
-    $.ajax({
-  type: "POST",
-  url: "http://localhost:4000/emppersonal",
-  data: employeeData,
+let message=document.getElementById("message");
+let msgjson= JSON.stringify($("#message").serializeObject());
+let myArray=[];
+$.ajax({
+  type: "GET",
+  url: "http://localhost:4000/supplierall",
+  data:msgjson ,
   success: function(result){
     myArray=result;
       buildTable(myArray);
@@ -119,7 +86,7 @@ empdata.addEventListener("submit", (e) => {
   error:function(){
     let message = document.getElementById("message");
           message.innerHTML = `<div class="alert alert-danger" role="alert">
-          Id or name doesnot exist
+            Some error occured
       </div>`;
           setTimeout(() => {
             message.innerHTML = "";
@@ -128,38 +95,26 @@ empdata.addEventListener("submit", (e) => {
   dataType: "json",
   contentType : "application/json"
 });
-  }
-})
+
+
 function buildTable(data){
     var tablehead=document.getElementById('tablehead');
     var tablebody=document.getElementById('tablebody');
     html1=`<tr>
-            <th scope="col">Employee Id</th>
-            <th scope="col">FirstName</th>
-            <th scope="col">LastName</th>
-            <th scope="col">Birthdate</th>
-            <th scope="col">Sex</th>
-            <th scope="col">Salary</th>
-            <th scope="col">Supervisor Id</th>
             <th scope="col">Branch Id</th>
+            <th scope="col">SupplierName</th>
+            <th scope="col">Product</th>
           </tr>`
           tablehead.innerHTML=html1;
     for(var i=0;i<data.length;i++){
     html=`<tr>
-      <td>${data[i].emp_id}</td>
-      <td>${data[i].first_name}</td>
-      <td>${data[i].last_name}</td>
-      <td>${data[i].birth_day}</td>
-      <td>${data[i].sex}</td>
-      <td>${data[i].salary}</td>
-      <td>${data[i].super_id}</td>
       <td>${data[i].branch_id}</td>
+      <td>${data[i].supplier_name}</td>
+      <td>${data[i].supply_type}</td>
     </tr>`
     tablebody.innerHTML+=html;
     html='';
 }
 }
 
-
 </script>
-</html>
