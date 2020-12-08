@@ -9,7 +9,42 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-	<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        
+        <a class="navbar-brand" href="#">
+              <img src="newspaper.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+  
+          PaperGo
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-t	arget="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto ">
+            <li class="nav-item ">
+              <a class="nav-link" href="./welcome.html">Home </a>
+            </li>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="./tables.html">Tables <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./aboutus.html">About</a>
+            </li>
+          </ul>
+  <!--==========================-->
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+              <a class="nav-link" href="./login.html">logout</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./signup.html">Signup</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+	<header class="my-4">
 	<h1>Contact us</h1>
 </header>
 
@@ -18,7 +53,7 @@
 <div class="fish" id="fish"></div>
 <div class="fish" id="fish2"></div>
 
-<form id="waterform" method="post">
+<form id="waterform" name="waterform" method="post">
 
 <div class="formgroup" id="name-form">
     <label for="name">Your name*</label>
@@ -37,7 +72,81 @@
 
 	<input type="submit" value="Send your message!" />
 </form>
+<div id="alerts">
+   
+  </div>
 </div>
 
+
+<script>
+        $.fn.serializeObject = function () {
+  var o = {};
+  var a = this.serializeArray();
+  $.each(a, function () {
+    if (o[this.name] !== undefined) {
+      if (!o[this.name].push) {
+        o[this.name] = [o[this.name]];
+      }
+      o[this.name].push(this.value || "");
+    } else {
+      o[this.name] = this.value || "";
+    }
+  });
+  return o;
+};
+const contData = document.getElementById('waterform');
+contData.addEventListener('submit',(e)=>{
+    e.preventDefault();
+     let contactData = JSON.stringify($('#waterform').serializeObject())
+     console.log(contactData)
+     let name = document.forms['waterform']['name'].value
+  let email = document.forms['waterform']['email'].value
+  let message = document.forms['waterform']['message'].value
+   if (name == "" || email == "" || message == "") {
+    let alerts = document.getElementById("alerts");
+    alerts.innerHTML = `<div class="alert alert-danger" role="alert">
+                                    No field must be left empty
+                            </div>`;
+    setTimeout(() => {
+      alerts.innerHTML = "";
+    }, 3000);
+  } else {
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:4000/insertcontact",
+      data: contactData,
+      success: function (data) {
+          console.log(data)
+          
+        let alerts = document.getElementById("alerts");
+        console.log(alerts)
+        alerts.innerHTML = `<div class="alert alert-success" role="alert">
+                Thank you for your feedback
+              </div>`;
+              console.log(alerts)
+        setTimeout(() => {
+          alerts.innerHTML = "";
+        }, 3000);
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("message").value = "";
+      },
+      error: function (data) {
+          let alerts = document.getElementById("alerts")
+          
+          alerts.innerHTML = `<div class="alert alert-danger" role="alert">
+                     Some error occured
+                </div>`;
+          setTimeout(() => {
+            alerts.innerHTML = "";
+          }, 3000);
+      },
+      dataType: "json",
+      contentType: "application/json",
+    });
+  }
+});
+
+</script>
 </body>
 </html>

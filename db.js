@@ -6,7 +6,8 @@ const con =  mysql.createPool({
     password: "Ramkrishna123",
     database: "login",
     port:"3306",
-    connectTimeout:"15000"
+    connectTimeout:"15000",
+    dateStrings:["DATE"]
 
     
 })

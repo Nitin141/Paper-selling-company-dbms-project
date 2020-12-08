@@ -10,7 +10,6 @@ app.use(
     extended: false,
   })
 )
-
 app.get('/get', (req, res) => {
   res.json({ Hello: 'Hello' })
 })
@@ -126,7 +125,9 @@ app.post('/emppersonal', async (req, res) => {
   try {
     var result = await db.query(query)
     console.log(result[0])
-    res.json(result[0])
+    if (result[0].length == 0)
+      res.status(400).json({ msg: `wrong employee credentials` })
+    else res.json(result[0])
   } catch (err) {
     console.log(err)
     res.status(500).json({ err: `error occured ${err}` })
@@ -136,7 +137,7 @@ app.get('/emppersonalall', async (req, res) => {
   let query = `select * from employee`
   try {
     var result = await db.query(query)
-    console.log(result[0])
+    console.log(typeof result[0][0].birth_day)
     res.json(result[0])
   } catch (err) {
     console.log(err)
@@ -151,7 +152,9 @@ app.post('/empsales', async (req, res) => {
   try {
     var result = await db.query(query)
     console.log(result[0])
-    res.json(result[0])
+    if (result[0].length == 0)
+      res.status(400).json({ msg: `wrong employee credentials` })
+    else res.json(result[0])
   } catch (err) {
     console.log(err)
     res.status(500).json({ err: `error occured ${err}` })
@@ -416,6 +419,32 @@ app.post('/bestemployee', async (req, res) => {
     res.json(result[0][0])
   } catch (error) {
     res.status(500).json({ msg: err })
+  }
+})
+app.get('/netclientsales', async (req, res) => {
+  let query = `select W.client_id,client_name,SUM(total_sales) as netsales
+from works_with W,client C
+where W.client_id=C.client_id
+GROUP BY W.client_id
+ORDER BY netsales DESC`
+  try {
+    let result = await db.query(query)
+    res.json(result[0])
+  } catch (error) {
+    res.status(500).json({ msg: err })
+  }
+})
+app.post('/insertcontact', async (req, res) => {
+  let name = req.body.name
+  let email = req.body.email
+  let message = req.body.message
+  console.log(message)
+  let query = `insert into contact values('${name}','${email}','${message}')`
+  let result = await db.query(query)
+  try {
+    res.json({ msg: 'Thank you for your feedback' })
+  } catch (error) {
+    res.status(500).json({ msg: `${error}` })
   }
 })
 const PORT = process.env.PORT || 4000
