@@ -107,9 +107,12 @@ app.post('/insertemployee', async (req, res) => {
   if (c1 != 0 && c != 0) {
     let query4 = `insert into employee values(${id},'${firstname}','${lastname}','${birthdate}','${sex}',
     ${salary},${supervisorid},${branchid})`
-    // console.log(query4);
-    empinsert = await db.query(query4)
-    res.json({ msg: 'data inserted' })
+    try {
+      empinsert = await db.query(query4)
+      res.json({ msg: 'data inserted' })
+    } catch (error) {
+      res.status(400).json({ error: 'Salary check' })
+    }
   } else {
     res.status(500).json({ error: 'Incorrect branch or supervisor' })
   }
@@ -190,12 +193,9 @@ app.post('/insertworkswith', async (req, res) => {
   }
 })
 app.post('/deleteemployee', async (req, res) => {
+  let empid = req.body.empid
   let firstname = req.body.firstname
   let lastname = req.body.lastname
-  let query1 = `select emp_id from employee where first_name='${firstname}' and last_name='${lastname}'`
-  console.log(query1)
-  let result1 = await db.query(query1)
-  let id = result1[0][0].emp_id
   let query2 = `select * from branch`
   let result2 = await db.query(query2)
   let query3 = `select count(*) as count from branch`
@@ -203,21 +203,21 @@ app.post('/deleteemployee', async (req, res) => {
   let c = 0
   let i
   for (i = 0; i < result3[0][0].count; i++) {
-    if (result2[0][i].mgr_id == `${id}`) {
+    if (result2[0][i].mgr_id === `${empid}`) {
       c = 1
       break
     }
   }
   if (c == 0) {
     try {
-      let query4 = `delete from employee where first_name='${firstname}' and last_name='${lastname}'`
+      let query4 = `delete from employee where emp_id=${empid} and first_name='${firstname}' and last_name='${lastname}'`
       let result4 = await db.query(query4)
       res.json({ msg: 'employee data deleted' })
     } catch (err) {
       res.status(400).json({ msg: 'Incorrect firstname or lastname' })
     }
   } else {
-    let query5 = `delete from employee where first_name='${firstname}' and last_name='${lastname}'`
+    let query5 = `delete from employee where emp_id=${empid} and first_name='${firstname}' and last_name='${lastname}'`
     let result5 = await db.query(query5)
     res.status(500).json({
       id: `${result2[0][i].mgr_id}`,
@@ -405,6 +405,16 @@ app.post('/onebranch', async (req, res) => {
       res.json(result[0])
     }
   } catch (err) {
+    res.status(500).json({ msg: err })
+  }
+})
+app.post('/bestemployee', async (req, res) => {
+  let increment = req.body.increment
+  let query = `CALL GetBestEmployee(${increment})`
+  try {
+    let result = await db.query(query)
+    res.json(result[0][0])
+  } catch (error) {
     res.status(500).json({ msg: err })
   }
 })
