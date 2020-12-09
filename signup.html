@@ -15,7 +15,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <body>
     <div class="body"></div>
-        <div class="grad"></div>
+        <div class="grad"> </div>
         <div class="header">
             <div>Paper<span>Go</span></div>
         </div>
@@ -23,17 +23,20 @@
         <div class="login">
                 <form  method="POST"  id="Signup" name="Signup">
      
-                    <label for="username"></label><input   type="text" name="username" id="username" placeholder="Enter new username">
+                    <label for="username"></label><input   type="text" name="username" id="username" placeholder="Enter employee id">
                     <label for="password"></label><input type="password" name="password" id="password" placeholder="Enter new password">
                     <label for="cpassword"></label><input type="password" name="cpassword" id="cpassword" placeholder="Confirm your password">
+                    <label for="role"></label><input  type="text" name="role" id="role" placeholder="Enter role (A/E)">
                     <div>
                         <button type="submit" id="btn" value="Add new user">Add new user
                     </div>
                 </form>
                 <div id="message">
                 </div>
+                 <div id="Error"></div>
         </div>
-    <div id="Error"></div>
+        
+   
 </body>
 <script src="signup.js"></script>
 </html>

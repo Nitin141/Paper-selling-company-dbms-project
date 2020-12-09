@@ -25,23 +25,23 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto ">
             <li class="nav-item ">
-              <a class="nav-link" href="./welcome.html">Home </a>
+              <a class="nav-link" href="../welcome.html">Home </a>
             </li>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="./tables.html">Tables <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="../tables.html">Tables <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./aboutus.html">About</a>
+              <a class="nav-link" href="../aboutus.html">About</a>
             </li>
           </ul>
   <!--==========================-->
           <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
-              <a class="nav-link" href="./login.html">logout</a>
+              <a id="logout" class="nav-link" href="../login.html">logout</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./signup.html">Signup</a>
+              <a class="nav-link" href="../signup.html">Signup</a>
             </li>
           </ul>
         </div>
@@ -78,6 +78,10 @@
   });
   return o;
  };
+ let log=document.getElementById('logout')
+log.addEventListener('click',()=>{
+  localStorage.clear()
+})
  const branchdata = document.getElementById("Branchtable");
  branchdata.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -129,7 +133,6 @@
             <th scope="col">Branch Id</th>
             <th scope="col">BranchName</th>
             <th scope="col">Manager Id</th>
-            <th scope="col">Manager Start Date</th>
           </tr>`
   tablehead.innerHTML = html1;
   for (var i = 0; i < data.length; i++) {
@@ -137,7 +140,6 @@
       <td>${data[i].branch_id}</td>
       <td>${data[i].branch_name}</td>
       <td>${data[i].mgr_id}</td>
-      <td>${data[i].mgr_start_date}</td>
     </tr>`
    tablebody.innerHTML += html;
    html = '';

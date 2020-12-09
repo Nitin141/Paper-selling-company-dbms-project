@@ -14,32 +14,36 @@ app.get('/get', (req, res) => {
   res.json({ Hello: 'Hello' })
 })
 app.post('/login', async (req, res) => {
-  let username = req.body.username
+  let username = parseInt(req.body.username)
   let password = req.body.password
   let query = `select * from admin`
   let query2 = 'select count(*) as count from admin'
+  let query3 = `select role from admin where username=${username} and password='${password}'`
   let result = await db.query(query)
   let count = await db.query(query2)
+  let role = await db.query(query3)
   // console.log(count[0][0].count);
   let i,
     c = 0
   for (i = 0; i < count[0][0].count; i++) {
     if (
       `${password}` == result[0][i].password &&
-      `${username}` == result[0][i].username
+      username == result[0][i].username
     ) {
       c++
     }
   }
-  if (c != 0) res.status(200).json({})
-  else {
+  if (c != 0) {
+    res.status(200).json({ role: role[0][0] })
+  } else {
     res.status(500).json({ error: 'Wrong password' })
   }
 })
 app.post('/signup', async (req, res) => {
-  var username = req.body.username
+  var username = parseInt(req.body.username)
   var password = req.body.password
   var cpassword = req.body.cpassword
+  var role = req.body.role
   let query = `select * from admin`
   let query2 = 'select count(*) as count from admin'
   let result = await db.query(query)
@@ -52,13 +56,13 @@ app.post('/signup', async (req, res) => {
     for (i = 0; i < count[0][0].count; i++) {
       if (
         `${password}` == result[0][i].password ||
-        `${username}` == result[0][i].username
+        username == result[0][i].username
       ) {
         c++
       }
     }
     if (c == 0) {
-      let query3 = `insert into admin values("${username}","${password}")`
+      let query3 = `insert into admin values(${username},"${password}",'${role}')`
       let result1 = await db.query(query3)
       // console.log(result);
       res.json({ msg: 'data inserted' })
@@ -233,17 +237,16 @@ app.post('/newmanager', async (req, res) => {
   let mgrid = req.body.managerid
   let branchid = req.body.branchid
   let branchname = req.body.branchname
-  let date = new Date()
-  let year = date.getFullYear()
-  let month = date.getMonth() + 1
-  let day = date.getDate()
-  let date1 = `${year}-${month}-${day}`
+  // let date = new Date()
+  // let year = date.getFullYear()
+  // let month = date.getMonth() + 1
+  // let day = date.getDate()
+  // let date1 = `${year}-${month}-${day}`
   let query = `update branch
-  set mgr_id=${mgrid},
-  mgr_start_date='${date1}'
+  set mgr_id=${mgrid}
   where branch_name='${branchname}'`
   let query2 = ` update employee
-   set super_id=${mgrid}3
+   set super_id=${mgrid}
    where branch_id=${branchid}
    and emp_id!=${mgrid}`
   let query4 = `update employee
@@ -252,12 +255,12 @@ app.post('/newmanager', async (req, res) => {
   let query3 = `update employee
    set super_id=100
    where emp_id=${mgrid}`
-  console.log(date1)
+  // console.log(date1)
+  let result = await db.query(query)
+  let result2 = await db.query(query2)
+  let result4 = await db.query(query4)
+  let result3 = await db.query(query3)
   try {
-    let result = await db.query(query)
-    let result2 = await db.query(query2)
-    let result4 = await db.query(query4)
-    let result3 = await db.query(query3)
     res.json({ msg: 'New manager appointed' })
   } catch (err) {
     res.status(400).json({ msg: 'Incorrect manager id or branchname' })

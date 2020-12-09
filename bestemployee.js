@@ -13,6 +13,10 @@ $.fn.serializeObject = function () {
   })
   return o
 }
+let log = document.getElementById('logout')
+log.addEventListener('click', () => {
+  localStorage.clear()
+})
 const empdata = document.getElementById('Bestemp')
 empdata.addEventListener('submit', (e) => {
   e.preventDefault()
