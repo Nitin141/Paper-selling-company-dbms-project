@@ -4,7 +4,7 @@ let log = document.getElementById('logout')
 log.addEventListener('click', () => {
   localStorage.clear()
 })
-if (role2 === 'A') {
+if (localStorage.getItem('role') === 'A') {
   let div = document.getElementById('displayclient')
   div.innerHTML = ` <button type="button" id="btn1" class="btn btn-primary btn-lg btn-block">Display particular client's details</button>
         <button type="button" id="btn2" class="btn btn-primary btn-lg btn-block">Display all client's  details</button>
@@ -31,7 +31,8 @@ if (role2 === 'A') {
   btn5.addEventListener('click', (e) => {
     window.location.href = './netsales.html'
   })
-} else {
+} else if (role2 === 'E') {
+  console.log('hello')
   let div = document.getElementById('displayclient')
   div.innerHTML = ` <button type="button" id="btn1" class="btn btn-primary btn-lg btn-block">Display particular client's details</button>
         <button type="button" id="btn2" class="btn btn-primary btn-lg btn-block">Display all client's  details</button>`

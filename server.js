@@ -40,6 +40,7 @@ app.post('/login', async (req, res) => {
   }
 })
 app.post('/signup', async (req, res) => {
+  console.log('hello')
   var username = parseInt(req.body.username)
   var password = req.body.password
   var cpassword = req.body.cpassword

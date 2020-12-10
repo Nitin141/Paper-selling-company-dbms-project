@@ -1,9 +1,11 @@
-let role = localStorage.getItem('role')
+let role2 = localStorage.getItem('role')
+console.log(role2)
 let log = document.getElementById('logout')
 log.addEventListener('click', () => {
   localStorage.clear()
 })
-if (role === 'A') {
+if (role2 === 'A') {
+  console.log('hello')
   let div = document.getElementById('displaysupplier')
   div.innerHTML = ` <button type="button" id="btn1" class="btn btn-primary btn-lg btn-block">Display particular supplier's  details</button>
         <button type="button" id="btn2" class="btn btn-primary btn-lg btn-block">Display all supplier's  details</button>
@@ -25,7 +27,8 @@ if (role === 'A') {
   btn4.addEventListener('click', (e) => {
     window.location.href = './deletesupplier.html'
   })
-} else {
+} else if (role2 === 'E') {
+  console.log('hello')
   let div = document.getElementById('displaysupplier')
   div.innerHTML = ` <button type="button" id="btn1" class="btn btn-primary btn-lg btn-block">Display particular supplier's  details</button>
         <button type="button" id="btn2" class="btn btn-primary btn-lg btn-block">Display all supplier's  details</button>`

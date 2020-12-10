@@ -34,7 +34,8 @@ if (role == 'A') {
       setTimeout(() => {
         message.innerHTML = ''
       }, 2000)
-    } else if (role !== 'A' || role !== 'E') {
+    } else if (role !== 'A' && role !== 'E') {
+      console.log(role)
       let message = document.getElementById('message')
       message.innerHTML = `<div class="alert alert-danger" role="alert">
     Role can be either A or E
