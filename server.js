@@ -34,7 +34,7 @@ app.post('/login', async (req, res) => {
     }
   }
   if (c != 0) {
-    res.status(200).json({ role: role[0][0] })
+    res.status(200).json({ role: role[0][0], username: username })
   } else {
     res.status(500).json({ error: 'Wrong password' })
   }
@@ -439,11 +439,13 @@ ORDER BY netsales DESC`
   }
 })
 app.post('/insertcontact', async (req, res) => {
-  let name = req.body.name
+  let emp_id = req.body.emp_id
+  let fid = new Date().getTime() / 1000
+  fid = parseInt(fid)
   let email = req.body.email
   let message = req.body.message
   console.log(message)
-  let query = `insert into contact values('${name}','${email}','${message}')`
+  let query = `insert into feedback values('${email}','${message}',${emp_id},${fid})`
   let result = await db.query(query)
   try {
     res.json({ msg: 'Thank you for your feedback' })

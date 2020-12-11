@@ -36,7 +36,7 @@
   <!--==========================-->
           <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
-              <a class="nav-link" href="./login.html">logout</a>
+              <a id="logout" class="nav-link" href="./login.html">logout</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="./signup.html">Signup</a>
@@ -55,18 +55,15 @@
 
 <form id="waterform" name="waterform" method="post">
 
-<div class="formgroup" id="name-form">
-    <label for="name">Your name*</label>
-    <input type="text" id="name" name="name" />
-</div>
+
 
 <div class="formgroup" id="email-form">
-    <label for="email">Your e-mail*</label>
+    <label for="email">Your e-mail</label>
     <input type="email" id="email" name="email" />
 </div>
 
 <div class="formgroup" id="message-form">
-    <label for="message">Your message</label>
+    <label for="message">Your feedback</label>
     <textarea id="message" name="message"></textarea>
 </div>
 
@@ -79,6 +76,7 @@
 
 
 <script>
+  
         $.fn.serializeObject = function () {
   var o = {};
   var a = this.serializeArray();
@@ -94,15 +92,21 @@
   });
   return o;
 };
+let log=document.getElementById('logout')
+log.addEventListener('click',()=>{
+  localStorage.clear()
+})
 const contData = document.getElementById('waterform');
+console.log(contData)
 contData.addEventListener('submit',(e)=>{
     e.preventDefault();
-     let contactData = JSON.stringify($('#waterform').serializeObject())
+    let cont=$('#waterform').serializeObject()
+    cont['emp_id']=localStorage.getItem('emp_id')
+     let contactData = JSON.stringify(cont)
      console.log(contactData)
-     let name = document.forms['waterform']['name'].value
   let email = document.forms['waterform']['email'].value
   let message = document.forms['waterform']['message'].value
-   if (name == "" || email == "" || message == "") {
+   if ( email == "" || message == "") {
     let alerts = document.getElementById("alerts");
     alerts.innerHTML = `<div class="alert alert-danger" role="alert">
                                     No field must be left empty
@@ -116,8 +120,6 @@ contData.addEventListener('submit',(e)=>{
       url: "http://localhost:4000/insertcontact",
       data: contactData,
       success: function (data) {
-          console.log(data)
-          
         let alerts = document.getElementById("alerts");
         console.log(alerts)
         alerts.innerHTML = `<div class="alert alert-success" role="alert">
@@ -127,7 +129,6 @@ contData.addEventListener('submit',(e)=>{
         setTimeout(() => {
           alerts.innerHTML = "";
         }, 3000);
-        document.getElementById("name").value = "";
         document.getElementById("email").value = "";
         document.getElementById("message").value = "";
       },
