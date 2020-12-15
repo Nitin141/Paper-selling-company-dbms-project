@@ -238,30 +238,9 @@ app.post('/newmanager', async (req, res) => {
   let mgrid = req.body.managerid
   let branchid = req.body.branchid
   let branchname = req.body.branchname
-  // let date = new Date()
-  // let year = date.getFullYear()
-  // let month = date.getMonth() + 1
-  // let day = date.getDate()
-  // let date1 = `${year}-${month}-${day}`
-  let query = `update branch
-  set mgr_id=${mgrid}
-  where branch_name='${branchname}'`
-  let query2 = ` update employee
-   set super_id=${mgrid}
-   where branch_id=${branchid}
-   and emp_id!=${mgrid}`
-  let query4 = `update employee
-   set salary=salary*1.2
-   where emp_id=${mgrid}`
-  let query3 = `update employee
-   set super_id=100
-   where emp_id=${mgrid}`
-  // console.log(date1)
-  let result = await db.query(query)
-  let result2 = await db.query(query2)
-  let result4 = await db.query(query4)
-  let result3 = await db.query(query3)
+  let query = `CALL SetnewManager(${mgrid},${branchid},'${branchname}')`
   try {
+    let result = db.query(query)
     res.json({ msg: 'New manager appointed' })
   } catch (err) {
     res.status(400).json({ msg: 'Incorrect manager id or branchname' })
