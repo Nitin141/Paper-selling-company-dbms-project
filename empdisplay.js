@@ -45,13 +45,18 @@ if (role2 === 'A') {
 } else {
   let div = document.getElementById('display')
   div.innerHTML = `<button type="button" id="btn1" class="btn btn-primary btn-lg btn-block">Display employee  details</button>
-    <button type="button" id="btn2" class="btn btn-primary btn-lg btn-block">Display all employee's  details</button>`
+    <button type="button" id="btn2" class="btn btn-primary btn-lg btn-block">Display all employee's  details</button>
+    <button type="button" id="btn3" class="btn btn-primary btn-lg btn-block">View your sales record</button>`
   let btn1 = document.getElementById('btn1')
   let btn2 = document.getElementById('btn2')
+  let btn3 = document.getElementById('btn3')
   btn1.addEventListener('click', (e) => {
     window.location.href = './table/emptable.html'
   })
   btn2.addEventListener('click', (e) => {
     window.location.href = './table/emptable2.html'
+  })
+  btn3.addEventListener('click', (e) => {
+    window.location.href = './table/emptablesale.html'
   })
 }

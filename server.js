@@ -425,11 +425,45 @@ app.post('/insertcontact', async (req, res) => {
   let message = req.body.message
   console.log(message)
   let query = `insert into feedback values('${email}','${message}',${emp_id},${fid})`
+  console.log(query)
   let result = await db.query(query)
   try {
     res.json({ msg: 'Thank you for your feedback' })
   } catch (error) {
     res.status(500).json({ msg: `${error}` })
+  }
+})
+app.post('/saleinfo', async (req, res) => {
+  let emp_id = req.body.emp_id
+  let query = `select e.emp_id,first_name,last_name,client_name,total_sales as totalsales
+   from employee e,works_with w,client c
+   where e.emp_id=w.emp_id
+   and w.client_id=c.client_id
+   and e.emp_id=${emp_id}`
+  try {
+    var result = await db.query(query)
+    if (result[0].length !== 0) {
+      res.json(result[0])
+    } else {
+      res.status(400).json({ msg: `no sales yet` })
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ err: `error occured ${err}` })
+  }
+})
+app.get('/getfeedback', async (req, res) => {
+  let query = `select first_name,last_name,feedback,email
+  from employee e,feedback f
+  where e.emp_id=f.emp_id`
+  try {
+    let result = await db.query(query)
+    let query1 = `delete from feedback`
+    await db.query(query1)
+    if (result[0].length !== 0) res.json(result[0])
+    else res.status(400).json({ msg: `no feedbacks` })
+  } catch (error) {
+    res.status(500).json({ msg: `Some error occured` })
   }
 })
 const PORT = process.env.PORT || 4000

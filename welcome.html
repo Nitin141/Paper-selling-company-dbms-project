@@ -71,13 +71,13 @@
 
     <footer class="main-footer">
         <nav>
-            <ul class="main-footer__links">
-                <li class="main-footer__link">
+            <ul class="main-footer__links" id="footer">
+                <!-- <li class="main-footer__link">
                     <a href="./contactus.html">Contact us</a>
                 </li>
                 <li class="main-footer__link">
                     <a href="#">Terms of Use</a>
-                </li>
+                </li> -->
             </ul>
         </nav>
     </footer>
@@ -89,5 +89,17 @@
   log.addEventListener('click',()=>{
     localStorage.clear()
   })
+  let footer=document.getElementById('footer');
+  let role=localStorage.getItem('role');
+  if(role==='A'){
+    footer.innerHTML=`<li class="main-footer__link">
+                    <a href="./viewfeedback.html">View Feedback</a>
+                </li>`
+  }
+  else if(role==='E'){
+     footer.innerHTML=`<li class="main-footer__link">
+                    <a href="./contactus.html">Contact us</a>
+                </li>`
+  }
 </script>
 </html>
