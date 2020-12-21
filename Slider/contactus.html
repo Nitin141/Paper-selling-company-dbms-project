@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Contact Us</title>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="/public/conus.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        
+        <a class="navbar-brand" href="#">
+              <img src="/public/newspaper.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+  
+          PaperGo
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-t	arget="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto ">
+            <li class="nav-item ">
+              <a class="nav-link" href="/welcome">Home </a>
+            </li>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/tables">Tables <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/aboutus">About</a>
+            </li>
+          </ul>
+  <!--==========================-->
+          <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+              <a  id="logout" class="nav-link" href="/loginp">logout</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/addnewuser">Signup</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+	<header class="my-4">
+	<h1>Contact us</h1>
+</header>
+
+<div id="form">
+
+<div class="fish" id="fish"></div>
+<div class="fish" id="fish2"></div>
+
+<form id="waterform" name="waterform" method="post">
+
+
+
+<div class="formgroup" id="email-form">
+    <label for="email">Your e-mail</label>
+    <input type="email" id="email" name="email" />
+</div>
+
+<div class="formgroup" id="message-form">
+    <label for="message">Your feedback</label>
+    <textarea id="message" name="message"></textarea>
+</div>
+
+	<input type="submit" value="Send your message!" />
+</form>
+<div id="alerts">
+   
+  </div>
+</div>
+
+
+<script>
+  
+        $.fn.serializeObject = function () {
+  var o = {};
+  var a = this.serializeArray();
+  $.each(a, function () {
+    if (o[this.name] !== undefined) {
+      if (!o[this.name].push) {
+        o[this.name] = [o[this.name]];
+      }
+      o[this.name].push(this.value || "");
+    } else {
+      o[this.name] = this.value || "";
+    }
+  });
+  return o;
+};
+let log=document.getElementById('logout')
+log.addEventListener('click',()=>{
+  localStorage.clear()
+})
+const contData = document.getElementById('waterform');
+console.log(contData)
+contData.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    let cont=$('#waterform').serializeObject()
+    cont['emp_id']=localStorage.getItem('emp_id')
+     let contactData = JSON.stringify(cont)
+     console.log(contactData)
+  let email = document.forms['waterform']['email'].value
+  let message = document.forms['waterform']['message'].value
+   if ( email == "" || message == "") {
+    let alerts = document.getElementById("alerts");
+    alerts.innerHTML = `<div class="alert alert-danger" role="alert">
+                                    No field must be left empty
+                            </div>`;
+    setTimeout(() => {
+      alerts.innerHTML = "";
+    }, 3000);
+  } else {
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:4000/insertcontact",
+      data: contactData,
+      success: function (data) {
+        let alerts = document.getElementById("alerts");
+        console.log(alerts)
+        alerts.innerHTML = `<div class="alert alert-success" role="alert">
+                Thank you for your feedback
+              </div>`;
+              console.log(alerts)
+        setTimeout(() => {
+          alerts.innerHTML = "";
+        }, 3000);
+        document.getElementById("email").value = "";
+        document.getElementById("message").value = "";
+      },
+      error: function (data) {
+          let alerts = document.getElementById("alerts")
+          
+          alerts.innerHTML = `<div class="alert alert-danger" role="alert">
+                     Some error occured
+                </div>`;
+          setTimeout(() => {
+            alerts.innerHTML = "";
+          }, 3000);
+      },
+      dataType: "json",
+      contentType: "application/json",
+    });
+  }
+});
+
+</script>
+</body>
+</html>

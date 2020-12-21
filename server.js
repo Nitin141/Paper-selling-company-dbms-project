@@ -4,12 +4,53 @@ const express = require('express')
 const db = require('./db')
 const app = express()
 const cors = require('cors')
+const path = require('path')
 app.use(cors())
 app.use(
   express.json({
     extended: false,
   })
 )
+app.use('/public', express.static(path.join(__dirname, 'Slider')))
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'slider.html'))
+})
+app.get('/loginp', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'login.html'))
+})
+app.get('/adduser', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'signup.html'))
+})
+app.get('/tables', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'tables.html'))
+})
+app.get('/welcome', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'welcome.html'))
+})
+app.get('/aboutus', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'aboutus.html'))
+})
+app.get('/contactus', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'contactus.html'))
+})
+app.get('/viewfeedback', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'viewfeedback.html'))
+})
+app.get('/displayemployee', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'employeedisplay.html'))
+})
+app.get('/displaybranch', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'branchform.html'))
+})
+app.get('/displayclient', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'displayclient.html'))
+})
+app.get('/displaysupplier', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'displaysupplier.html'))
+})
+app.get('/branchdetail', function (req, res) {
+  res.sendFile(path.join(__dirname, 'Slider', 'table', 'branchtable1.html'))
+})
 app.get('/get', (req, res) => {
   res.json({ Hello: 'Hello' })
 })
