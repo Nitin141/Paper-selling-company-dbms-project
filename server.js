@@ -5,6 +5,7 @@ const db = require('./db')
 const app = express()
 const cors = require('cors')
 const path = require('path')
+const { dirname } = require('path')
 app.use(cors())
 app.use(
   express.json({
@@ -17,6 +18,9 @@ app.get('/', function (req, res) {
 })
 app.get('/loginp', function (req, res) {
   res.sendFile(path.join(__dirname, 'Slider', 'login.html'))
+})
+app.get('/forgot', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Slider', 'forgotpass.html'))
 })
 app.get('/adduser', function (req, res) {
   res.sendFile(path.join(__dirname, 'Slider', 'signup.html'))
@@ -78,6 +82,39 @@ app.post('/login', async (req, res) => {
     res.status(200).json({ role: role[0][0], username: username })
   } else {
     res.status(500).json({ error: 'Wrong password' })
+  }
+})
+app.post('/newpass', async (req, res) => {
+  let empid = req.body.username
+  let query = `select * from admin`
+  let query2 = 'select count(*) as count from admin'
+  let result = await db.query(query)
+  let count = await db.query(query2)
+  let i,
+    c = 0
+  for (i = 0; i < count[0][0].count; i++) {
+    if (empid == result[0][i].username) {
+      c++
+    }
+  }
+  if (c != 0) {
+    res.json({ msg: 'Success' })
+  } else {
+    res.status(400).json({ msg: 'no such username' })
+  }
+})
+app.post('/changepass', async (req, res) => {
+  console.log('hello hi')
+  let username = req.body.username
+  let password = req.body.password
+  let query = `update admin 
+  set password='${password}'
+  where username=${username}`
+  let result = await db.query(query)
+  try {
+    res.json({ msg: 'Password changed' })
+  } catch (error) {
+    res.json({ msg: 'Incorrect username' })
   }
 })
 app.post('/signup', async (req, res) => {
