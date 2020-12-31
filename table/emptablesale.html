@@ -28,7 +28,7 @@
   <div class="background">
     <img src="Red Dark Blue Floral Illustration Spring Desktop Wallpaper (1).jpg" class="img-fluid" alt="Responsive image">
   </div>
-     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         
         <a class="navbar-brand" href="#">
               <img src="../newspaper.svg" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -93,17 +93,30 @@ log.addEventListener('click',()=>{
   localStorage.clear()
 })
 let message=document.getElementById("message");
-let msgjson= JSON.stringify($("#message").serializeObject());
+let msgjson= $("#message").serializeObject();
+msgjson['emp_id']=localStorage.getItem('emp_id')
+ let empdata = JSON.stringify(msgjson)
       let myArray=[];
     $.ajax({
-  type: "GET",
-  url: "http://localhost:4000/empsalesall",
-  data:msgjson ,
+  type: "POST",
+  url: "http://localhost:4000/saleinfo",
+  data:empdata ,
   success: function(result){
     myArray=result;
       buildTable(myArray);
   },
-  error:function(){
+  error:function(data){
+   console.log(data)
+   if(data.status===400){
+    let message = document.getElementById("message");
+          message.innerHTML = `<div class="alert alert-danger" role="alert">
+          Sorry you have not made any sales yet
+      </div>`;
+          setTimeout(() => {
+            message.innerHTML = "";
+          }, 2000);
+   }
+   else{
     let message = document.getElementById("message");
           message.innerHTML = `<div class="alert alert-danger" role="alert">
           Error occured
@@ -111,6 +124,7 @@ let msgjson= JSON.stringify($("#message").serializeObject());
           setTimeout(() => {
             message.innerHTML = "";
           }, 2000);
+         }
   },
   dataType: "json",
   contentType : "application/json"
@@ -124,6 +138,7 @@ function buildTable(data){
             <th scope="col">Employee Id</th>
             <th scope="col">FirstName</th>
             <th scope="col">LastName</th>
+            <th scope="col">Client Name</th>
             <th scope="col">Total Sales</th>
           </tr>`
           tablehead.innerHTML=html1;
@@ -132,6 +147,7 @@ function buildTable(data){
       <td>${data[i].emp_id}</td>
       <td>${data[i].first_name}</td>
       <td>${data[i].last_name}</td>
+      <td>${data[i].client_name}</td>
       <td>${data[i].totalsales}</td>
     </tr>`
     tablebody.innerHTML+=html;

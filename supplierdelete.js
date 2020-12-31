@@ -17,56 +17,45 @@ let log = document.getElementById('logout')
 log.addEventListener('click', () => {
   localStorage.clear()
 })
-const workswith = document.getElementById('Workswith')
-workswith.addEventListener('submit', (e) => {
-  console.log('Hello')
+const supplier = document.getElementById('Supplier')
+supplier.addEventListener('submit', (e) => {
   e.preventDefault()
-  let salesData = JSON.stringify($('#Workswith').serializeObject())
-  let empid = document.forms['Workswith']['empid'].value
-  let clientid = document.forms['Workswith']['clientid'].value
-  let totalsales = document.forms['Workswith']['totalsales'].value
-  if (empid == '' || clientid == '' || totalsales == '') {
+  let supplierData = JSON.stringify($('#Supplier').serializeObject())
+  let name = document.forms['Supplier']['suppliername'].value
+  if (name == '') {
     let message = document.getElementById('message')
     message.innerHTML = `<div class="alert alert-danger" role="alert">
-                                No field must be left empty
-                        </div>`
+                                  No field must be left empty
+                          </div>`
     setTimeout(() => {
       message.innerHTML = ''
     }, 2000)
   } else {
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:4000/insertworkswith',
-      data: salesData,
+      url: 'http://localhost:4000/deletesupplier',
+      data: supplierData,
       success: function () {
         let message = document.getElementById('message')
         message.innerHTML = `<div class="alert alert-success" role="alert">
-      Sales data inserted
-    </div>`
+                  Supplier data deleted
+                </div>`
         setTimeout(() => {
           message.innerHTML = ''
         }, 2000)
-        document.getElementById('empid').value = ''
-        document.getElementById('clientid').value = ''
-        document.getElementById('totalsales').value = ''
+        document.getElementById('suppliername').value = ''
       },
-      error: function () {
-        if (status.status == 500) {
+      error: function (data) {
+        console.log(data.responseJSON)
+        if (data.status == 500) {
           let message = document.getElementById('message')
           message.innerHTML = `<div class="alert alert-danger" role="alert">
-      Employee id or client id doesnot exists
-</div>`
+                Supplier name is incorrect
+                </div>`
           setTimeout(() => {
             message.innerHTML = ''
           }, 2000)
-        } else {
-          let message = document.getElementById('message')
-          message.innerHTML = `<div class="alert alert-danger" role="alert">
-      Employee  and client belong to different branches
-</div>`
-          setTimeout(() => {
-            message.innerHTML = ''
-          }, 2000)
+          document.getElementById('suppliername').value = ''
         }
       },
       dataType: 'json',

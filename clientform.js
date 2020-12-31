@@ -17,53 +17,43 @@ let log = document.getElementById('logout')
 log.addEventListener('click', () => {
   localStorage.clear()
 })
-const workswith = document.getElementById('Workswith')
-workswith.addEventListener('submit', (e) => {
-  console.log('Hello')
+const client = document.getElementById('Client')
+client.addEventListener('submit', (e) => {
   e.preventDefault()
-  let salesData = JSON.stringify($('#Workswith').serializeObject())
-  let empid = document.forms['Workswith']['empid'].value
-  let clientid = document.forms['Workswith']['clientid'].value
-  let totalsales = document.forms['Workswith']['totalsales'].value
-  if (empid == '' || clientid == '' || totalsales == '') {
+  let clientData = JSON.stringify($('#Client').serializeObject())
+  let clientname = document.forms['Client']['clientname'].value
+  let branchname = document.forms['Client']['branchname'].value
+  if (clientname == '' || branchname == '') {
     let message = document.getElementById('message')
     message.innerHTML = `<div class="alert alert-danger" role="alert">
-                                No field must be left empty
-                        </div>`
+                                    No field must be left empty
+                            </div>`
     setTimeout(() => {
       message.innerHTML = ''
     }, 2000)
   } else {
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:4000/insertworkswith',
-      data: salesData,
+      url: 'http://localhost:4000/insertclient',
+      data: clientData,
       success: function () {
         let message = document.getElementById('message')
         message.innerHTML = `<div class="alert alert-success" role="alert">
-      Sales data inserted
-    </div>`
+              Client data inserted
+            </div>`
         setTimeout(() => {
           message.innerHTML = ''
         }, 2000)
-        document.getElementById('empid').value = ''
-        document.getElementById('clientid').value = ''
-        document.getElementById('totalsales').value = ''
+        document.getElementById('clientname').value = ''
+        document.getElementById('branchname').value = ''
       },
-      error: function () {
-        if (status.status == 500) {
+      error: function (data) {
+        console.log(data)
+        if (data.status == 400) {
           let message = document.getElementById('message')
           message.innerHTML = `<div class="alert alert-danger" role="alert">
-      Employee id or client id doesnot exists
-</div>`
-          setTimeout(() => {
-            message.innerHTML = ''
-          }, 2000)
-        } else {
-          let message = document.getElementById('message')
-          message.innerHTML = `<div class="alert alert-danger" role="alert">
-      Employee  and client belong to different branches
-</div>`
+                 Incorrect branchname
+            </div>`
           setTimeout(() => {
             message.innerHTML = ''
           }, 2000)

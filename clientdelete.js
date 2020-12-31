@@ -17,14 +17,12 @@ let log = document.getElementById('logout')
 log.addEventListener('click', () => {
   localStorage.clear()
 })
-const manager = document.getElementById('Manager')
-manager.addEventListener('submit', (e) => {
+const client = document.getElementById('Client')
+client.addEventListener('submit', (e) => {
   e.preventDefault()
-  let managerData = JSON.stringify($('#Manager').serializeObject())
-  let managerid = document.forms['Manager']['managerid'].value
-  let branchname = document.forms['Manager']['branchname'].value
-  let branchid = document.forms['Manager']['branchid'].value
-  if (managerid == '' || branchname == '' || branchid == '') {
+  let clientData = JSON.stringify($('#Client').serializeObject())
+  let name = document.forms['Client']['clientname'].value
+  if (name == '') {
     let message = document.getElementById('message')
     message.innerHTML = `<div class="alert alert-danger" role="alert">
                                 No field must be left empty
@@ -35,31 +33,30 @@ manager.addEventListener('submit', (e) => {
   } else {
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:4000/newmanager',
-      data: managerData,
+      url: 'http://localhost:4000/deleteclient',
+      data: clientData,
       success: function () {
         let message = document.getElementById('message')
         message.innerHTML = `<div class="alert alert-success" role="alert">
-            New manager appointed
+            Client data deleted
           </div>`
         setTimeout(() => {
           message.innerHTML = ''
         }, 2000)
-        document.getElementById('managerid').value = ''
-        document.getElementById('branchid').value = ''
-        document.getElementById('branchname').value = ''
+        document.getElementById('clientname').value = ''
       },
-      error: function () {
-        let message = document.getElementById('message')
-        message.innerHTML = `<div class="alert alert-danger" role="alert">
-            Incorrect employee id or branch name
+      error: function (data) {
+        console.log(data.responseJSON)
+        if (data.status == 500) {
+          let message = document.getElementById('message')
+          message.innerHTML = `<div class="alert alert-danger" role="alert">
+          Client name is incorrect
           </div>`
-        setTimeout(() => {
-          message.innerHTML = ''
-        }, 2000)
-        document.getElementById('managerid').value = ''
-        document.getElementById('branchid').value = ''
-        document.getElementById('branchname').value = ''
+          setTimeout(() => {
+            message.innerHTML = ''
+          }, 2000)
+          document.getElementById('clientname').value = ''
+        }
       },
       dataType: 'json',
       contentType: 'application/json',

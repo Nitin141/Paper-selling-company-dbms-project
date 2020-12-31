@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employeedisplay</title>
+    <title>Supplier delete</title>
 </head>
 <style>
     
@@ -18,7 +18,7 @@
   position: relative;
 }
 .background{
-    /* background: url("../images/plans-background.jpg"); */
+    /*background: url("../images/plans-background.jpg");*/
     top: 0px;
     left: 0px;
     position: fixed;
@@ -31,7 +31,7 @@
   <div class="background">
     <img src="./table/Red Dark Blue Floral Illustration Spring Desktop Wallpaper (1).jpg" class="img-fluid" alt="Responsive image">
   </div>
- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         
         <a class="navbar-brand" href="#">
               <img src="newspaper.svg" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -66,7 +66,16 @@
           </ul>
         </div>
       </nav>
-    <div id="display" class="my-4 mx-4">
-</div>
-<script src="empdisplay.js"></script>
+      <form class="my-4 mx-4" id="Supplier" name="Supplier" method="POST">
+        <div class="form-group">
+            <input type="text" class="form-control" id="suppliername" name="suppliername"  aria-describedby="emailHelp" placeholder=
+            "Enter Name of Supplier">
+          </div>
+          <div class="my-4 mx-4">
+            <button type="submit" id="btn1" class="btn btn-primary btn-lg btn-block">Delete supplier record</button>
+          </div>
+        </form>
+        <div id="message">
+        </div>
+<script src="supplierdelete.js"></script>
 </body>

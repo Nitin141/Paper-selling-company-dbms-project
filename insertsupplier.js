@@ -17,53 +17,53 @@ let log = document.getElementById('logout')
 log.addEventListener('click', () => {
   localStorage.clear()
 })
-const workswith = document.getElementById('Workswith')
-workswith.addEventListener('submit', (e) => {
-  console.log('Hello')
+const supplier = document.getElementById('Supplier')
+supplier.addEventListener('submit', (e) => {
   e.preventDefault()
-  let salesData = JSON.stringify($('#Workswith').serializeObject())
-  let empid = document.forms['Workswith']['empid'].value
-  let clientid = document.forms['Workswith']['clientid'].value
-  let totalsales = document.forms['Workswith']['totalsales'].value
-  if (empid == '' || clientid == '' || totalsales == '') {
+  let supplierData = JSON.stringify($('#Supplier').serializeObject())
+  let suppliername = document.forms['Supplier']['suppliername'].value
+  let branchid = document.forms['Supplier']['branchid'].value
+  let product = document.forms['Supplier']['product'].value
+  if (suppliername == '' || branchid == '' || product == '') {
     let message = document.getElementById('message')
     message.innerHTML = `<div class="alert alert-danger" role="alert">
-                                No field must be left empty
-                        </div>`
+                                    No field must be left empty
+                            </div>`
     setTimeout(() => {
       message.innerHTML = ''
     }, 2000)
   } else {
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:4000/insertworkswith',
-      data: salesData,
+      url: 'http://localhost:4000/insertsupplier',
+      data: supplierData,
       success: function () {
         let message = document.getElementById('message')
         message.innerHTML = `<div class="alert alert-success" role="alert">
-      Sales data inserted
-    </div>`
+                Supplier data inserted
+              </div>`
         setTimeout(() => {
           message.innerHTML = ''
         }, 2000)
-        document.getElementById('empid').value = ''
-        document.getElementById('clientid').value = ''
-        document.getElementById('totalsales').value = ''
+        document.getElementById('suppliername').value = ''
+        document.getElementById('branchid').value = ''
+        document.getElementById('product').value = ''
       },
-      error: function () {
-        if (status.status == 500) {
+      error: function (data) {
+        console.log(data)
+        if (data.status == 400) {
           let message = document.getElementById('message')
           message.innerHTML = `<div class="alert alert-danger" role="alert">
-      Employee id or client id doesnot exists
-</div>`
+                   Incorrect branchid
+              </div>`
           setTimeout(() => {
             message.innerHTML = ''
           }, 2000)
         } else {
           let message = document.getElementById('message')
           message.innerHTML = `<div class="alert alert-danger" role="alert">
-      Employee  and client belong to different branches
-</div>`
+                     Some error occured;
+                </div>`
           setTimeout(() => {
             message.innerHTML = ''
           }, 2000)
