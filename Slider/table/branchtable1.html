@@ -69,8 +69,8 @@
       </nav>
  <form class="my-4 mx-4" id="Branchtable" name="Branchtable" method="POST">
   <div class="form-group">
-   <input type="text" class="form-control" id="branchname" name="branchname"aria-describedby="emailHelp"
-    placeholder="Enter branch's name">
+   <input type="number" class="form-control" id="branchid" name="branchid"aria-describedby="emailHelp"
+    placeholder="Enter branch's id">
   </div>
   <button type="submit" class="btn btn-primary">Display</button>
  </form>
@@ -109,8 +109,8 @@ log.addEventListener('click',()=>{
   tablehead.innerHTML = '';
   tablebody.innerHTML = '';
   let branchData = JSON.stringify($("#Branchtable").serializeObject());
-  let name = document.forms["Branchtable"]["branchname"].value;
-  if (name == "") {
+  let branchid = document.forms["Branchtable"]["branchid"].value;
+  if (branchid == "") {
    let message = document.getElementById("message");
    console.log(message);
    message.innerHTML = `<div class="alert alert-danger" role="alert">
@@ -135,7 +135,7 @@ log.addEventListener('click',()=>{
      if (status.status == 400) {
       let message = document.getElementById("message");
       message.innerHTML = `<div class="alert alert-danger" role="alert">
-           Branch name doesnot exist
+           Branch id doesnot exist
            </div>`;
       setTimeout(() => {
        message.innerHTML = "";

@@ -97,11 +97,25 @@ log.addEventListener('click',()=>{
   localStorage.clear()
 })
 const contData = document.getElementById('waterform');
-console.log(contData)
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+let date=formatDate(new Date())
 contData.addEventListener('submit',(e)=>{
     e.preventDefault();
     let cont=$('#waterform').serializeObject()
     cont['emp_id']=localStorage.getItem('emp_id')
+    cont['date']=date
      let contactData = JSON.stringify(cont)
      console.log(contactData)
   let email = document.forms['waterform']['email'].value

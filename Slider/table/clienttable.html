@@ -65,7 +65,7 @@
       </nav>
       <form class="my-4 mx-4" id="Clienttable" name="Clienttable" method="POST">
         <div class="form-group">
-          <input type="text" class="form-control" id="clientname" name="clientname"  aria-describedby="emailHelp" placeholder="Enter client's name">
+          <input type="number" class="form-control" id="clientid" name="clientid"  aria-describedby="emailHelp" placeholder="Enter client's id">
         </div>
         <button type="submit" class="btn btn-primary">Display</button>
     </form>
@@ -105,8 +105,8 @@ clientdata.addEventListener("submit", (e) => {
     tablebody.innerHTML='';
     let clientData = JSON.stringify($("#Clienttable").serializeObject());
     console.log(clientData);
-    let name = document.forms["Clienttable"]["clientname"].value;
-  if(name=="")
+    let clientid = document.forms["Clienttable"]["clientid"].value;
+  if(clientid=="")
   {
     let message = document.getElementById("message");
     console.log(message);

@@ -67,6 +67,9 @@
         <div class="form-group">
           <input type="text" class="form-control" id="suppliername" name="suppliername"  aria-describedby="emailHelp" placeholder="Enter supplier's name">
         </div>
+        <div class="form-group">
+          <input type="number" class="form-control" id="branchid" name="branchid"  aria-describedby="emailHelp" placeholder="Enter branch id">
+        </div>
         <button type="submit" class="btn btn-primary">Display</button>
     </form>
     <div id="message">
@@ -106,7 +109,8 @@ supplierdata.addEventListener("submit", (e) => {
     let supplierData = JSON.stringify($("#Suppliertable").serializeObject());
     console.log(supplierData);
     let name = document.forms["Suppliertable"]["suppliername"].value;
-  if(name=="")
+    let id = document.forms["Suppliertable"]["branchid"].value;
+  if(name==""||id==="")
   {
     let message = document.getElementById("message");
     console.log(message);

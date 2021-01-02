@@ -67,12 +67,7 @@
         <div class="form-group">
           <input type="number" class="form-control" id="empid" name="empid"  aria-describedby="emailHelp" placeholder="Enter employee's id">
         </div>
-        <div class="form-group">
-          <input type="text" class="form-control" id="firstname" name="firstname"  aria-describedby="emailHelp" placeholder="Enter employee's FirstName">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter employee's LastName">
-        </div>
+        
         <button type="submit" class="btn btn-primary">Display</button>
         
     </form>
@@ -113,9 +108,8 @@ empdata.addEventListener("submit", (e) => {
     let employeeData = JSON.stringify($("#Employeetable").serializeObject());
     console.log(employeeData);
     var w = document.forms["Employeetable"]["empid"].value;
-  var x = document.forms["Employeetable"]["firstname"].value;
-  var y = document.forms["Employeetable"]["lastname"].value;
-  if(w==''||x==''||y=='')
+  
+  if(w=='')
   {
     let message = document.getElementById("message");
     console.log(message);

@@ -22,7 +22,7 @@ app.get('/loginp', function (req, res) {
 app.get('/forgot', (req, res) => {
   res.sendFile(path.join(__dirname, 'Slider', 'forgotpass.html'))
 })
-app.get('/adduser', function (req, res) {
+app.get('/addnewuser', function (req, res) {
   res.sendFile(path.join(__dirname, 'Slider', 'signup.html'))
 })
 app.get('/tables', function (req, res) {
@@ -201,9 +201,8 @@ app.post('/insertemployee', async (req, res) => {
 })
 app.post('/emppersonal', async (req, res) => {
   let empid = req.body.empid
-  let firstname = req.body.firstname
-  let lastname = req.body.lastname
-  let query = ` select * from employee where emp_id=${empid} and first_name='${firstname}' and last_name='${lastname}';`
+
+  let query = ` select * from employee where emp_id=${empid};`
 
   try {
     var result = await db.query(query)
@@ -280,36 +279,44 @@ app.post('/insertworkswith', async (req, res) => {
 })
 app.post('/deleteemployee', async (req, res) => {
   let empid = req.body.empid
-  let firstname = req.body.firstname
-  let lastname = req.body.lastname
+
   let query2 = `select * from branch`
   let result2 = await db.query(query2)
   let query3 = `select count(*) as count from branch`
   let result3 = await db.query(query3)
-  let c = 0
+  let c = 0,
+    c1 = 0
   let i
+  for (i = 0; i < result3[0][0].count; i++) {
+    if (result2[0][i].emp_id === `${empid}`) {
+      c1 = 1
+      break
+    }
+  }
   for (i = 0; i < result3[0][0].count; i++) {
     if (result2[0][i].mgr_id === `${empid}`) {
       c = 1
       break
     }
   }
-  if (c == 0) {
+  if (c == 0 && c1 != 0) {
     try {
-      let query4 = `delete from employee where emp_id=${empid} and first_name='${firstname}' and last_name='${lastname}'`
+      let query4 = `delete from employee where emp_id=${empid} `
       let result4 = await db.query(query4)
       res.json({ msg: 'employee data deleted' })
     } catch (err) {
-      res.status(400).json({ msg: 'Incorrect firstname or lastname' })
+      res.status(400).json({ msg: 'Incorrect employee id' })
     }
-  } else {
-    let query5 = `delete from employee where emp_id=${empid} and first_name='${firstname}' and last_name='${lastname}'`
+  } else if (c != 0 && c1 != 0) {
+    let query5 = `delete from employee where emp_id=${empid} `
     let result5 = await db.query(query5)
     res.status(500).json({
       id: `${result2[0][i].mgr_id}`,
       name: `${result2[0][i].branch_name}`,
       branchid: `${result2[0][i].branch_id}`,
     })
+  } else if (c == 0) {
+    res.status(400).json({ msg: 'Incorrect employee id' })
   }
 })
 app.post('/newmanager', async (req, res) => {
@@ -372,8 +379,8 @@ app.post('/insertsupplier', async (req, res) => {
   }
 })
 app.post('/clientpersonal', async (req, res) => {
-  let clientname = req.body.clientname
-  let query = `select * from client where client_name='${clientname}'`
+  let clientid = req.body.clientid
+  let query = `select * from client where client_id='${clientid}'`
   try {
     let result = await db.query(query)
     if (result[0].length == 0) {
@@ -428,7 +435,8 @@ app.post('/deletesupplier', async (req, res) => {
 })
 app.post('/supplierpersonal', async (req, res) => {
   let suppliername = req.body.suppliername
-  let query = `select * from branch_supplier where supplier_name='${suppliername}'`
+  let branchid = req.body.branchid
+  let query = `select * from branch_supplier where supplier_name='${suppliername}'and branch_id=${branchid}`
   try {
     let result = await db.query(query)
     if (result[0].length == 0) {
@@ -459,8 +467,8 @@ app.get('/branchall', async (req, res) => {
   }
 })
 app.post('/onebranch', async (req, res) => {
-  let branchname = req.body.branchname
-  let query = `select * from branch where branch_name='${branchname}'`
+  let branchid = req.body.branchid
+  let query = `select * from branch where branch_id='${branchid}'`
   try {
     let result = await db.query(query)
     if (result[0].length == 0) {
@@ -497,12 +505,13 @@ ORDER BY netsales DESC`
 })
 app.post('/insertcontact', async (req, res) => {
   let emp_id = req.body.emp_id
+  let date = req.body.date
   let fid = new Date().getTime() / 1000
   fid = parseInt(fid)
   let email = req.body.email
   let message = req.body.message
   console.log(message)
-  let query = `insert into feedback values('${email}','${message}',${emp_id},${fid})`
+  let query = `insert into feedback values('${email}','${message}',${emp_id},${fid},'${date}')`
   console.log(query)
   let result = await db.query(query)
   try {
@@ -531,13 +540,15 @@ app.post('/saleinfo', async (req, res) => {
   }
 })
 app.get('/getfeedback', async (req, res) => {
-  let query = `select first_name,last_name,feedback,email
+  let query = `select first_name,last_name,feedback,email,date
   from employee e,feedback f
-  where e.emp_id=f.emp_id`
+  where e.emp_id=f.emp_id
+  order by date desc`
   try {
     let result = await db.query(query)
-    let query1 = `delete from feedback`
-    await db.query(query1)
+
+    // let query1 = `delete from feedback`
+    // await db.query(query1)
     if (result[0].length !== 0) res.json(result[0])
     else res.status(400).json({ msg: `no feedbacks` })
   } catch (error) {

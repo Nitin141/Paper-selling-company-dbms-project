@@ -1,7 +1,9 @@
 let role2 = localStorage.getItem('role')
 let allentry = JSON.parse(localStorage.getItem('allentry'))
 console.log(role2)
-
+if (allentry == null) {
+  allentry = []
+}
 let log = document.getElementById('logout')
 log.addEventListener('click', () => {
   localStorage.clear()

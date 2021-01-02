@@ -22,9 +22,8 @@ employee.addEventListener('submit', (e) => {
   e.preventDefault()
   let employeeData = JSON.stringify($('#Employee').serializeObject())
   let empid = document.forms['Employee']['empid'].value
-  let firstname = document.forms['Employee']['firstname'].value
-  let lastname = document.forms['Employee']['lastname'].value
-  if (empid == '' || firstname == '' || lastname == '') {
+
+  if (empid == '') {
     let message = document.getElementById('message')
     message.innerHTML = `<div class="alert alert-danger" role="alert">
                                 No field must be left empty
@@ -46,8 +45,6 @@ employee.addEventListener('submit', (e) => {
           message.innerHTML = ''
         }, 2000)
         document.getElementById('empid').value = ''
-        document.getElementById('firstname').value = ''
-        document.getElementById('lastname').value = ''
       },
       error: function (data) {
         console.log(data.responseJSON)
@@ -58,8 +55,7 @@ employee.addEventListener('submit', (e) => {
         Employee is manager of ${data.responseJSON.name} branch,branchid:${data.responseJSON.branchid} 
         and supervisor of employees there
         </div>`
-          document.getElementById('firstname').value = ''
-          document.getElementById('lastname').value = ''
+
           document.getElementById('empid').value = ''
           let button = document.getElementById('button')
           button.innerHTML = `<button type="button" id="btn2" class="btn btn-primary btn-lg btn-block">Appoint new manager and supervisor</button>`
@@ -68,6 +64,15 @@ employee.addEventListener('submit', (e) => {
           btn2.addEventListener('click', (e) => {
             window.location.href = '/public/newbranchmanager.html'
           })
+        } else {
+          let message = document.getElementById('message')
+          message.innerHTML = `<div class="alert alert-danger" role="alert">
+             Employee id doesnot exist
+        </div>`
+          setTimeout(() => {
+            message.innerHTML = ''
+          }, 2000)
+          document.getElementById('empid').value = ''
         }
       },
       dataType: 'json',
