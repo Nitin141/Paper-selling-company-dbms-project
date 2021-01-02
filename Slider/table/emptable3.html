@@ -65,8 +65,8 @@
       </nav>
       <form class="my-4 mx-4" id="Salesrecord" name="Salesrecord" method="POST">
         <div class="form-group">
-          <input type="text" class="form-control" id="firstname" name="firstname"  aria-describedby="emailHelp" placeholder="Enter employee's firstname">
-          <input type="text" class="form-control" id="lastname" name="lastname"  aria-describedby="emailHelp" placeholder="Enter employee's lastname">
+          <input type="number" class="form-control" id="empid" name="empid"  aria-describedby="emailHelp" placeholder="Enter employee's id">
+          
         </div>
         <button type="submit" class="btn btn-primary">Display</button>
     </form>
@@ -104,9 +104,8 @@ empsales.addEventListener("submit", (e) => {
     e.preventDefault();
     let salesData = JSON.stringify($("#Salesrecord").serializeObject());
     console.log(salesData);
-  var x = document.forms["Salesrecord"]["firstname"].value;
-  var y = document.forms["Salesrecord"]["lastname"].value;
-  if(x==''||y=='')
+  var x = document.forms["Salesrecord"]["empid"].value;
+  if(x=='')
   {
     let message = document.getElementById("message");
     console.log(message);
@@ -130,8 +129,8 @@ empsales.addEventListener("submit", (e) => {
   error:function(){
     let message = document.getElementById("message");
           message.innerHTML = `<div class="alert alert-danger" role="alert">
-           Name doesnot exist
-      </div>`;
+           employee id doesnot exist
+        </div>`;
           setTimeout(() => {
             message.innerHTML = "";
           }, 2000);

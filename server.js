@@ -1,6 +1,4 @@
 const express = require('express')
-// const http=require("http");
-// const fs=require("fs")
 const db = require('./db')
 const app = express()
 const cors = require('cors')
@@ -104,7 +102,6 @@ app.post('/newpass', async (req, res) => {
   }
 })
 app.post('/changepass', async (req, res) => {
-  console.log('hello hi')
   let username = req.body.username
   let password = req.body.password
   let query = `update admin 
@@ -120,14 +117,20 @@ app.post('/changepass', async (req, res) => {
 app.post('/signup', async (req, res) => {
   console.log('hello')
   var username = parseInt(req.body.username)
+  console.log(username)
   var password = req.body.password
   var cpassword = req.body.cpassword
   var role = req.body.role
   let query = `select * from admin`
+  let query1 = `select emp_id from employee`
   let query2 = 'select count(*) as count from admin'
+  let query3 = 'select count(*) as count from employee'
   let result = await db.query(query)
+  let result1 = await db.query(query1)
   let count = await db.query(query2)
-  let c = 0
+  let count1 = await db.query(query3)
+  let c = 0,
+    c1 = 0
   let i
   // var dateformat=`Select DATE_FORMAT("${birthdate}","%Y-%m-%d");`
   // birthdate=await db.query(dateformat);
@@ -139,14 +142,21 @@ app.post('/signup', async (req, res) => {
       ) {
         c++
       }
+      for (i = 0; i < count1[0][0].count; i++) {
+        if (username === result1[0][i].emp_id) {
+          c1++
+        }
+      }
     }
-    if (c == 0) {
+    if (c == 0 && c1 != 0) {
       let query3 = `insert into admin values(${username},"${password}",'${role}')`
       let result1 = await db.query(query3)
       // console.log(result);
       res.json({ msg: 'data inserted' })
-    } else {
+    } else if (c != 0) {
       res.status(400).json({ error: 'username or password already exists' })
+    } else {
+      res.status(404).json({ error: 'employee id doesnot exists' })
     }
   } else {
     res.status(500).json({ error: 'Wrong password' })
@@ -227,10 +237,9 @@ app.get('/emppersonalall', async (req, res) => {
   }
 })
 app.post('/empsales', async (req, res) => {
-  let firstname = req.body.firstname
-  let lastname = req.body.lastname
+  let empid = req.body.empid
   let query = `select * from works_with
-   where emp_id=(select emp_id from employee where first_name='${firstname}' and last_name='${lastname}');`
+   where emp_id=${empid}`
   try {
     var result = await db.query(query)
     console.log(result[0])
