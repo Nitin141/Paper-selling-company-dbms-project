@@ -169,8 +169,8 @@ app.post('/insertemployee', async (req, res) => {
   let sex = req.body.sex
   let salary = req.body.Salary
   let id
-  let supervisorid = req.body.supervisorid
-  let branchid = req.body.branchid
+  let supervisorid = parseInt(req.body.supervisorid)
+  let branchid = parseInt(req.body.branchid)
   let query = `select * from branch`
   let query1 = `select * from employee`
   let query2 = `select count(*) as count from branch`
@@ -185,17 +185,17 @@ app.post('/insertemployee', async (req, res) => {
     c = 0,
     c1 = 0
   for (i = 0; i < count1[0][0].count; i++) {
-    if (result1[0][i].branch_id == `${branchid}`) {
+    if (result1[0][i].branch_id == branchid) {
       c++
     }
   }
   for (i = 0; i < count2[0][0].count; i++) {
-    if (result2[0][i].super_id == `${supervisorid}`) {
+    if (result2[0][i].super_id == supervisorid) {
       c1++
     }
   }
   id = result2[0][i - 1].emp_id + 1
-  // console.log(id);
+  console.log(c1)
   if (c1 != 0 && c != 0) {
     let query4 = `insert into employee values(${id},'${firstname}','${lastname}','${birthdate}','${sex}',
     ${salary},${supervisorid},${branchid})`
@@ -203,10 +203,14 @@ app.post('/insertemployee', async (req, res) => {
       empinsert = await db.query(query4)
       res.json({ msg: 'data inserted' })
     } catch (error) {
-      res.status(400).json({ error: 'Salary check' })
+      if (error.sqlState === '22012')
+        res.status(500).json({ error: 'BIRTHDAY check' })
+      else if (error.sqlState === '45000') {
+        res.status(400).json({ error: 'salary error' })
+      }
     }
   } else {
-    res.status(500).json({ error: 'Incorrect branch or supervisor' })
+    res.status(404).json({ error: 'Incorrect branch or supervisor' })
   }
 })
 app.post('/emppersonal', async (req, res) => {
@@ -227,9 +231,11 @@ app.post('/emppersonal', async (req, res) => {
 })
 app.get('/emppersonalall', async (req, res) => {
   let query = `select * from employee`
+
   try {
     var result = await db.query(query)
     console.log(typeof result[0][0].birth_day)
+    console.log(result[0])
     res.json(result[0])
   } catch (err) {
     console.log(err)
@@ -287,27 +293,33 @@ app.post('/insertworkswith', async (req, res) => {
   }
 })
 app.post('/deleteemployee', async (req, res) => {
-  let empid = req.body.empid
-
+  let empid = parseInt(req.body.empid)
+  let query = `select * from employee`
+  let result = await db.query(query)
   let query2 = `select * from branch`
   let result2 = await db.query(query2)
   let query3 = `select count(*) as count from branch`
   let result3 = await db.query(query3)
+  let query1 = `select count(*) as count from employee`
+  let result1 = await db.query(query1)
   let c = 0,
     c1 = 0
   let i
-  for (i = 0; i < result3[0][0].count; i++) {
-    if (result2[0][i].emp_id === `${empid}`) {
+  for (i = 0; i < result1[0][0].count; i++) {
+    if (result[0][i].emp_id === empid) {
       c1 = 1
       break
     }
   }
   for (i = 0; i < result3[0][0].count; i++) {
-    if (result2[0][i].mgr_id === `${empid}`) {
+    if (result2[0][i].mgr_id === empid) {
       c = 1
       break
     }
   }
+
+  console.log(c1)
+
   if (c == 0 && c1 != 0) {
     try {
       let query4 = `delete from employee where emp_id=${empid} `
@@ -324,20 +336,20 @@ app.post('/deleteemployee', async (req, res) => {
       name: `${result2[0][i].branch_name}`,
       branchid: `${result2[0][i].branch_id}`,
     })
-  } else if (c == 0) {
+  } else if (c == 0 && c1 == 0) {
     res.status(400).json({ msg: 'Incorrect employee id' })
   }
 })
 app.post('/newmanager', async (req, res) => {
   let mgrid = req.body.managerid
   let branchid = req.body.branchid
-  let branchname = req.body.branchname
-  let query = `CALL SetnewManager(${mgrid},${branchid},'${branchname}')`
+
+  let query = `CALL SetnewManager(${mgrid},${branchid})`
   try {
     let result = db.query(query)
     res.json({ msg: 'New manager appointed' })
   } catch (err) {
-    res.status(400).json({ msg: 'Incorrect manager id or branchname' })
+    res.status(400).json({ msg: 'Incorrect manager id or branchid' })
   }
 })
 app.post('/insertclient', async (req, res) => {

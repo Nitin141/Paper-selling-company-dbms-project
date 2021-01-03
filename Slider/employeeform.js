@@ -40,17 +40,7 @@ function validateform(
     }, 2000)
     return false
   }
-  let age = new Date(new Date() - new Date(birthdate)).getFullYear() - 1970
-  if (age < 18) {
-    let message = document.getElementById('message')
-    message.innerHTML = `<div class="alert alert-warning" role="alert">
-        Employee should be more than 18 years old
-      </div>>`
-    setTimeout(() => {
-      message.innerHTML = ''
-    }, 2000)
-    return false
-  }
+
   if (salary < 10000) {
     let message = document.getElementById('message')
     message.innerHTML = `<div class="alert alert-warning" role="alert">
@@ -114,6 +104,14 @@ employee.addEventListener('submit', (e) => {
           let message = document.getElementById('message')
           message.innerHTML = `<div class="alert alert-danger" role="alert">
         Salary cannot be greater than that of supervisor
+        </div>`
+          setTimeout(() => {
+            message.innerHTML = ''
+          }, 2000)
+        } else if (res.status === 500) {
+          let message = document.getElementById('message')
+          message.innerHTML = `<div class="alert alert-danger" role="alert">
+        Minimum age of employee should be 18
         </div>`
           setTimeout(() => {
             message.innerHTML = ''

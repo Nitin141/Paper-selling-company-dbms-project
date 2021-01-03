@@ -22,9 +22,9 @@ manager.addEventListener('submit', (e) => {
   e.preventDefault()
   let managerData = JSON.stringify($('#Manager').serializeObject())
   let managerid = document.forms['Manager']['managerid'].value
-  let branchname = document.forms['Manager']['branchname'].value
+
   let branchid = document.forms['Manager']['branchid'].value
-  if (managerid == '' || branchname == '' || branchid == '') {
+  if (managerid == '' || branchid == '') {
     let message = document.getElementById('message')
     message.innerHTML = `<div class="alert alert-danger" role="alert">
                                 No field must be left empty
@@ -47,7 +47,6 @@ manager.addEventListener('submit', (e) => {
         }, 2000)
         document.getElementById('managerid').value = ''
         document.getElementById('branchid').value = ''
-        document.getElementById('branchname').value = ''
       },
       error: function () {
         let message = document.getElementById('message')
@@ -59,7 +58,6 @@ manager.addEventListener('submit', (e) => {
         }, 2000)
         document.getElementById('managerid').value = ''
         document.getElementById('branchid').value = ''
-        document.getElementById('branchname').value = ''
       },
       dataType: 'json',
       contentType: 'application/json',
