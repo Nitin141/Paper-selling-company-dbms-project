@@ -423,13 +423,13 @@ app.get('/clientall', async (req, res) => {
   }
 })
 app.post('/deleteclient', async (req, res) => {
-  let clientname = req.body.clientname
-  let query = `delete from client where client_name='${clientname}'`
-  let query1 = `select * from client where client_name='${clientname}'`
+  let clientid = req.body.clientid
+  let query = `delete from client where client_id=${clientid}`
+  let query1 = `select * from client where client_id=${clientid}`
   let result = await db.query(query1)
   if (result[0].length != 0) {
+    let result1 = await db.query(query)
     try {
-      let result1 = await db.query(query)
       res.json({ msg: 'Client data deleted' })
     } catch {
       res.status(400).json({ msg: 'Some error occured' })
@@ -440,8 +440,9 @@ app.post('/deleteclient', async (req, res) => {
 })
 app.post('/deletesupplier', async (req, res) => {
   let suppliername = req.body.suppliername
-  let query = `delete from branch_supplier where supplier_name='${suppliername}'`
-  let query1 = `select * from branch_supplier where supplier_name='${suppliername}'`
+  let branchid = req.body.branchid
+  let query = `delete from branch_supplier where supplier_name='${suppliername}' and branch_id=${branchid}`
+  let query1 = `select * from branch_supplier where supplier_name='${suppliername}' and branch_id=${branchid}`
   let result = await db.query(query1)
   if (result[0].length != 0) {
     try {

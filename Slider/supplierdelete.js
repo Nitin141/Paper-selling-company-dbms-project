@@ -22,7 +22,8 @@ supplier.addEventListener('submit', (e) => {
   e.preventDefault()
   let supplierData = JSON.stringify($('#Supplier').serializeObject())
   let name = document.forms['Supplier']['suppliername'].value
-  if (name == '') {
+  let branchid = document.forms['Supplier']['branchid'].value
+  if (name == '' || branchid == '') {
     let message = document.getElementById('message')
     message.innerHTML = `<div class="alert alert-danger" role="alert">
                                   No field must be left empty
@@ -44,18 +45,20 @@ supplier.addEventListener('submit', (e) => {
           message.innerHTML = ''
         }, 2000)
         document.getElementById('suppliername').value = ''
+        document.getElementById('branchid').value = ''
       },
       error: function (data) {
         console.log(data.responseJSON)
         if (data.status == 500) {
           let message = document.getElementById('message')
           message.innerHTML = `<div class="alert alert-danger" role="alert">
-                Supplier name is incorrect
+                Supplier name or branch id is incorrect
                 </div>`
           setTimeout(() => {
             message.innerHTML = ''
           }, 2000)
           document.getElementById('suppliername').value = ''
+          document.getElementById('branchid').value = ''
         }
       },
       dataType: 'json',

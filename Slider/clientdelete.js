@@ -21,8 +21,8 @@ const client = document.getElementById('Client')
 client.addEventListener('submit', (e) => {
   e.preventDefault()
   let clientData = JSON.stringify($('#Client').serializeObject())
-  let name = document.forms['Client']['clientname'].value
-  if (name == '') {
+  let id = document.forms['Client']['clientid'].value
+  if (id == '') {
     let message = document.getElementById('message')
     message.innerHTML = `<div class="alert alert-danger" role="alert">
                                 No field must be left empty
@@ -43,7 +43,7 @@ client.addEventListener('submit', (e) => {
         setTimeout(() => {
           message.innerHTML = ''
         }, 2000)
-        document.getElementById('clientname').value = ''
+        document.getElementById('clientid').value = ''
       },
       error: function (data) {
         console.log(data.responseJSON)
@@ -55,7 +55,7 @@ client.addEventListener('submit', (e) => {
           setTimeout(() => {
             message.innerHTML = ''
           }, 2000)
-          document.getElementById('clientname').value = ''
+          document.getElementById('clientid').value = ''
         }
       },
       dataType: 'json',
