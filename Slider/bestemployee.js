@@ -56,7 +56,7 @@ empdata.addEventListener('submit', (e) => {
       error: function () {
         let message = document.getElementById('message')
         message.innerHTML = `<div class="alert alert-danger" role="alert">
-          Some error occured
+          Salary cannot be increased more than that of supervisor
       </div>`
         setTimeout(() => {
           message.innerHTML = ''
