@@ -51,7 +51,7 @@ if (role == 'A') {
         success: function () {
           let message = document.getElementById('message')
           message.innerHTML = `<div class="alert alert-success" role="alert">
-        New admin inserted
+        New USER inserted
     </div>`
           setTimeout(() => {
             message.innerHTML = ''

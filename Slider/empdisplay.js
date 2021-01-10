@@ -93,10 +93,12 @@ if (role2 === 'A' && allentry.length !== 0) {
   let div = document.getElementById('display')
   div.innerHTML = `<button type="button" id="btn1" class="btn btn-primary btn-lg btn-block">Display employee  details</button>
     <button type="button" id="btn2" class="btn btn-primary btn-lg btn-block">Display all employee's  details</button>
-    <button type="button" id="btn3" class="btn btn-primary btn-lg btn-block">View your sales record</button>`
+    <button type="button" id="btn3" class="btn btn-primary btn-lg btn-block">View your sales record</button>
+    <button type="button" id="btn4" class="btn btn-primary btn-lg btn-block">Enter new sales record</button>`
   let btn1 = document.getElementById('btn1')
   let btn2 = document.getElementById('btn2')
   let btn3 = document.getElementById('btn3')
+  let btn4 = document.getElementById('btn4')
   btn1.addEventListener('click', (e) => {
     window.location.href = '/public/table/emptable.html'
   })
@@ -105,5 +107,8 @@ if (role2 === 'A' && allentry.length !== 0) {
   })
   btn3.addEventListener('click', (e) => {
     window.location.href = '/public/table/emptablesale.html'
+  })
+  btn4.addEventListener('click', (e) => {
+    window.location.href = '/public/table/insertsale.html'
   })
 }

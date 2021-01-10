@@ -561,6 +561,19 @@ app.post('/saleinfo', async (req, res) => {
     res.status(500).json({ err: `error occured ${err}` })
   }
 })
+app.post('/insertsale', async (req, res) => {
+  let empid = req.body.empid
+  let clientid = req.body.clientid
+  let sales = req.body.sales
+  let query = `insert into works_with values(${empid},${clientid},${sales})`
+  try {
+    let result = await db.query(query)
+    res.json({ msg: 'sales data inserted' })
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({ msg: 'client and employee must be in same branch' })
+  }
+})
 app.get('/getfeedback', async (req, res) => {
   let query = `select first_name,last_name,feedback,email,date
   from employee e,feedback f
