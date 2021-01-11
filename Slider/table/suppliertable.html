@@ -155,6 +155,7 @@ function buildTable(data){
             <th scope="col">Branch Id</th>
             <th scope="col">SupplierName</th>
             <th scope="col">Product</th>
+            <th scope="col">Cost</th>
           </tr>`
           tablehead.innerHTML=html1;
     for(var i=0;i<data.length;i++){
@@ -162,6 +163,7 @@ function buildTable(data){
       <td>${data[i].branch_id}</td>
       <td>${data[i].supplier_name}</td>
       <td>${data[i].supply_type}</td>
+      <td>${data[i].cost}</td>
     </tr>`
     tablebody.innerHTML+=html;
     html='';

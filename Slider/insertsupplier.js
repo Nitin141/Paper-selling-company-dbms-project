@@ -24,7 +24,8 @@ supplier.addEventListener('submit', (e) => {
   let suppliername = document.forms['Supplier']['suppliername'].value
   let branchid = document.forms['Supplier']['branchid'].value
   let product = document.forms['Supplier']['product'].value
-  if (suppliername == '' || branchid == '' || product == '') {
+  let cost = document.forms['Supplier']['cost'].value
+  if (suppliername == '' || branchid == '' || product == '' || cost === '') {
     let message = document.getElementById('message')
     message.innerHTML = `<div class="alert alert-danger" role="alert">
                                     No field must be left empty
@@ -48,6 +49,7 @@ supplier.addEventListener('submit', (e) => {
         document.getElementById('suppliername').value = ''
         document.getElementById('branchid').value = ''
         document.getElementById('product').value = ''
+        document.getElementById('cost').value = ''
       },
       error: function (data) {
         console.log(data)

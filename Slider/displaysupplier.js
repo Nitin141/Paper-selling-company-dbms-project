@@ -10,11 +10,13 @@ if (role2 === 'A') {
   div.innerHTML = ` <button type="button" id="btn1" class="btn btn-primary btn-lg btn-block">Display particular supplier's  details</button>
         <button type="button" id="btn2" class="btn btn-primary btn-lg btn-block">Display all supplier's  details</button>
         <button type="button" id="btn3" class="btn btn-primary btn-lg btn-block">Insert new supplier's  details</button>
-        <button type="button" id="btn4" class="btn btn-primary btn-lg btn-block">Delete any supplier's  details</button>`
+        <button type="button" id="btn4" class="btn btn-primary btn-lg btn-block">Delete any supplier's  details</button>
+        <button type="button" id="btn5" class="btn btn-primary btn-lg btn-block">Calculate net profit of a branch</button>`
   let btn1 = document.getElementById('btn1')
   let btn2 = document.getElementById('btn2')
   let btn3 = document.getElementById('btn3')
   let btn4 = document.getElementById('btn4')
+  let btn5 = document.getElementById('btn5')
   btn1.addEventListener('click', (e) => {
     window.location.href = '/public/table/suppliertable.html'
   })
@@ -26,6 +28,9 @@ if (role2 === 'A') {
   })
   btn4.addEventListener('click', (e) => {
     window.location.href = '/public/deletesupplier.html'
+  })
+  btn5.addEventListener('click', (e) => {
+    window.location.href = '/public/table/netprofit.html'
   })
 } else if (role2 === 'E') {
   console.log('hello')

@@ -385,12 +385,13 @@ app.post('/insertsupplier', async (req, res) => {
   let branchid = req.body.branchid
   let suppliername = req.body.suppliername
   let product = req.body.product
+  let cost = req.body.cost
   let query = `select branch_name from branch where branch_id=${branchid}`
   let result = await db.query(query)
   if (result[0].length == 0) {
     res.status(400).json({ msg: 'Incorrect branch id' })
   } else {
-    let query1 = `insert into branch_supplier values(${branchid},'${suppliername}','${product}')`
+    let query1 = `insert into branch_supplier values(${branchid},'${suppliername}','${product}',${cost})`
     try {
       let result1 = await db.query(query1)
       res.json({ msg: 'Supplier information inserted successfully' })
@@ -572,6 +573,18 @@ app.post('/insertsale', async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(400).json({ msg: 'client and employee must be in same branch' })
+  }
+})
+app.post('/netprofit', async (req, res) => {
+  let branchid = parseInt(req.body.branchid)
+  console.log(branchid)
+  let query = `CALL NetProfit(${branchid})`
+  try {
+    let result = await db.query(query)
+    console.log(result[0][0][0])
+    res.json(result[0][0][0])
+  } catch (error) {
+    console.log(error)
   }
 })
 app.get('/getfeedback', async (req, res) => {
